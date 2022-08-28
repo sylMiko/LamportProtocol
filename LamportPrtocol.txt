@@ -1,0 +1,86 @@
+
+from __future__ import print_function
+import hashlib
+
+
+Xn = "123456789ABCDE"
+n = 20
+
+#funkcja sluzaca do hashowania
+#in - uzytkownik
+#out - wartosc po shashowaniu
+def hashh(Xn):
+    d = hashlib.sha3_512()
+    d.update(Xn.encode())
+    hash = d.hexdigest()
+    #print("Wartosc shashowana: ", hash)
+    return hash
+
+
+#Obliczanie identygikatora
+#in -  nr uzytkwonika
+#out - identyfikator uzytkownika
+def krok_pierwszy(nr_uzytk):
+    tmp = hashh(Xn)
+    for i in range(nr_uzytk):
+        tmp = hashh(tmp)
+    print("Aktualny idenetyfikator", tmp)
+    return tmp
+
+
+#czy_istnieje_dany_uzytkownik
+#in -> identyfikator uzytkownika z zeszlego kroku
+#out -> true lub false
+def krok_drugi(hash_uz, Xn):
+    tmp = hashh(Xn)
+    print("Sprawdzenie czy istnieje uzytkownik: ", hash_uz)
+    for i in range(nr_uzytk):
+        tmp = hashh(tmp)
+        if(tmp == hash_uz):
+            print("Uzytkownik istnieje, jego id to ", tmp)
+            print("Podaj haslo:")
+            return true
+    print("Uzytkownik nie istnieje", tmp)
+    return false
+
+
+
+#podanie hasla - > krok 3
+#in -> nr uzytkownika
+#out -> haslo uzytkownika
+def krok_trzeci(Xn, nr_uzytk):
+    tmp = hashh(Xn)
+    for i in range(nr_uzytk -1):
+        tmp = hashh(tmp)
+    print("Haslo uzytkownika: "+tmp)
+    return tmp
+
+#sprawdzenie poprawnosci hasla -> krok 4
+#in - > identyfikmator uzytkownika i haslo
+#out -> true or false
+
+def krok_czwarty(xkmin1, xk):
+    xkmin1 = hashh(xkmin1)
+    print("Identyfikator poprzedniego: ",xkmin1)
+    print("Identyfikator obecnego: ", xk)
+    if(xkmin1 == xk):
+        print("Haslo jest poprawne")
+        return true
+
+
+#nr_uzytk = input("Podaj numer uzytkownika(jesli nie istnieje wpisz 0)")
+nr_uzytk = 1
+while True:
+      nr_uzytk = int(nr_uzytk)
+      if(nr_uzytk == 0):
+         nr_uzytk = 10
+      tmp = krok_pierwszy(nr_uzytk)
+      krok_drugi(tmp, Xn)
+      docwarteg = krok_trzeci(Xn, nr_uzytk)
+      krok_czwarty(docwarteg, tmp)
+      #sprawdz = input("Czy chces kontynuowac - 1 - tak - 2 - nie")
+      sprawdz = 2
+      if(sprawdz == 1):
+          nr_uzytk = nr_uzytk - 1
+      else:
+        break
